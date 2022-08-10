@@ -2,26 +2,34 @@ const numberCounter = document.getElementById('clicker__counter');
 const numberSpeed = document.getElementById('clicker__speed');
 const image = document.getElementById('cookie');
 let f = Number(numberCounter.textContent);
-let start = null;
-let end = null;
 
-function down() {
+class Clicker {
+	constuctor(start, end) {
+		this.start = start;
+		this.end = end;
+	}
+	down() {
+		let date = new Date();
+		this.start = (date.getMinutes() * 60) + (date.getSeconds() * 1000) + date.getMilliseconds();
+		f += 1;
+		numberCounter.textContent = f;
 
-	window.start = new Date;
-	f += 1;
-	numberCounter.textContent = f;
-
-	image.width = 230;
-	image.height = 230;
-	console.log(end - start)
+		image.width = 230;
+		image.height = 230;
+		
+		if(f > 1) {
+		numberSpeed.textContent = (1000 /((this.start - this.end))).toFixed(2);
+		}
+	}
+	up() {
+		let date = new Date();
+		this.end = (date.getMinutes() * 60) + (date.getSeconds() * 1000) + date.getMilliseconds();
+			console.log(this.end)
+		image.width = 200;
+		image.height = 150;
+	}
 }
+let clicker = new Clicker();
 
-function up() {
-	window.end = new Date;
-	console.log(end)
-	image.width = 200;
-	image.height = 200;
-}
-
-addEventListener('mousedown', down);
-addEventListener('mouseup', up);
+addEventListener('mousedown', clicker.down);
+addEventListener('mouseup', clicker.up);
