@@ -31,5 +31,5 @@ class Clicker {
 }
 let clicker = new Clicker();
 
-addEventListener('mousedown', clicker.down);
-addEventListener('mouseup', clicker.up);
+image.addEventListener('mousedown', clicker.down);
+image.addEventListener('mouseup', clicker.up);
