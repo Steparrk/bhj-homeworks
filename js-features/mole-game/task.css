@@ -22,9 +22,63 @@
 }
 
 .hole_has-mole {
-  background-image: url(https://i.postimg.cc/rmtGV8h9/mole.png);
+  background-image: url(mole.png);
   background-position: center center;
   background-repeat: no-repeat;
   background-size: contain;
   background-color: brown;
+}
+@media (min-width: 641px) and (max-width: 1200px) {
+  .content {
+    width: 100%;
+  }
+  .hole-game {
+    width: 100%;
+  }
+  .card {
+  width: 100%;
+  margin-bottom: 0;
+  padding: 2%;
+}
+.hole {
+  width: 20vw;
+  height: 20vw;
+  margin: 0 5% 5%;
+  background: gray;
+  border-radius: 50%;
+}
+.hole_has-mole {
+  background-image: url(mole.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: brown;
+}
+}
+@media (max-width: 640px) {
+  .content {
+    width: 100%;
+  }
+  .hole-game {
+    width: 100%;
+  }
+  .card {
+  width: 100%;
+  margin-bottom: 0;
+  padding: 2%;
+}
+.hole {
+  width: 20vw;
+  height: 20vw;
+  margin: 0 5% 5%;
+  background: gray;
+  border-radius: 50%;
+}
+.hole_has-mole {
+  background-image: url(mole.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: brown;
+}
 }
