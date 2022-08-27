@@ -4,9 +4,10 @@ class Game {
     this.wordElement = container.querySelector('.word');
     this.winsElement = container.querySelector('.status__wins');
     this.lossElement = container.querySelector('.status__loss');
+    this.currentWord = null;
+    this.timerId = null;
 
     this.reset();
-
     this.registerEvents();
   }
 
@@ -17,13 +18,18 @@ class Game {
   }
 
   registerEvents() {
-    /*
-      TODO:
-      Написать обработчик события, который откликается
-      на каждый введённый символ.
-      В случае правильного ввода слова вызываем this.success()
-      При неправильном вводе символа - this.fail();
-     */
+     let callThis = this.fail.bind(this)
+     document.addEventListener('keydown', (event) =>{
+        if(this.timerId === null){
+          let second = 1000 * this.currentWord.length;
+          this.timerId = setTimeout(callThis, second);
+        }
+        if((this.currentSymbol.textContent).toLowerCase().codePointAt(0) === (event.key).toLowerCase().codePointAt(0)){
+          this.success();
+        }else{
+          this.fail();
+        }
+    });
   }
 
   success() {
@@ -32,7 +38,6 @@ class Game {
     if (this.currentSymbol !== null) {
       return;
     }
-
     if (++this.winsElement.textContent === 10) {
       alert('Победа!');
       this.reset();
@@ -49,8 +54,12 @@ class Game {
   }
 
   setNewWord() {
+    clearTimeout(this.timerId);
+    this.timerId = null;
+
     const word = this.getWord();
 
+    this.currentWord = word;
     this.renderWord(word);
   }
 
@@ -66,7 +75,8 @@ class Game {
         'popcorn',
         'cinema',
         'love',
-        'javascript'
+        'javascript',
+        'программист'
       ],
       index = Math.floor(Math.random() * words.length);
 
@@ -83,8 +93,9 @@ class Game {
     this.wordElement.innerHTML = html;
 
     this.currentSymbol = this.wordElement.querySelector('.symbol_current');
+  return word;
   }
 }
 
-new Game(document.getElementById('game'))
+new Game(document.getElementById('game'));
 
