@@ -8,30 +8,44 @@ class Game {
     this.currentWord = null;
     this.timerId = null;
 
+    this.wordElement.style.display = 'none';
     this.start(); 
   }
 
   start(){
     this.startElement.onclick = () => {
       this.startElement.style.display = 'none'; 
+      this.wordElement.style.display = 'block';
       this.setNewWord();
       this.registerEvents();
     }
   }
+  reload() {
+    this.winsElement.textContent = 0;
+    this.lossElement.textContent = 0;
+    this.wordElement.style.display = 'none';
+    this.startElement.style.display = 'block';
+    clearTimeout(this.timerId);
+    this.timerId = null;
+    document.removeEventListener('keydown', this.callListener);
+  }
 
-  registerEvents(stop) {
-    document.addEventListener('keydown', (event) =>{
+  registerEvents() {
+    this.callListener = this.listener.bind(this);
+    document.addEventListener('keydown', this.callListener);
+}
+  listener(event){
       if (event.shiftKey || event.altKey || event.ctrlkey) {
         console.log('Горячие главиши');
-      }else{
-        if((this.currentSymbol.textContent).toLowerCase() === (event.key).toLowerCase()){
-          this.success();
-        }else{
-          this.fail();
-        }
+        return;
       }
-    });
-}
+      if((this.currentSymbol.textContent).toLowerCase() === (event.key).toLowerCase()){
+        this.success();
+      }else{
+        this.fail();
+      }
+  }
+
   success() {
     this.currentSymbol.classList.add('symbol_correct');
     this.currentSymbol = this.currentSymbol.nextElementSibling;
@@ -40,19 +54,19 @@ class Game {
     }
     if (++this.winsElement.textContent === 10) {
       alert('Победа!');
-      location.reload();
-    }else{
-      this.setNewWord();
+      this.reload();
+      return;
     }
+      this.setNewWord();
   }
 
   fail() {
     if (++this.lossElement.textContent === 5) {
       alert('Вы проиграли!');
-      location.reload();
-    }else{
-      this.setNewWord();
+      this.reload();
+      return;
     }
+      this.setNewWord();
   }
 
   setNewWord() {
@@ -61,13 +75,10 @@ class Game {
     this.currentWord = word;
     this.renderWord(word);
 
-    if(this.timerId !== null)console.timeEnd()
-
     clearTimeout(this.timerId);
     this.timerId = null;
     let callThis = this.fail.bind(this);
     if(this.timerId === null){
-      console.time()
       let second = 1000 * this.currentWord.length;
       this.timerId = setTimeout(callThis, second);
     }
