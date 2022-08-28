@@ -1,37 +1,37 @@
 class Game {
   constructor(container) {
     this.container = container;
+    this.startElement = container.querySelector('#start');
     this.wordElement = container.querySelector('.word');
     this.winsElement = container.querySelector('.status__wins');
     this.lossElement = container.querySelector('.status__loss');
     this.currentWord = null;
     this.timerId = null;
 
-    this.reset();
-    this.registerEvents();
+    this.start(); 
   }
 
-  reset() {
-    this.setNewWord();
-    this.winsElement.textContent = 0;
-    this.lossElement.textContent = 0;
+  start(){
+    this.startElement.onclick = () => {
+      this.startElement.style.display = 'none'; 
+      this.setNewWord();
+      this.registerEvents();
+    }
   }
 
-  registerEvents() {
-     let callThis = this.fail.bind(this)
-     document.addEventListener('keydown', (event) =>{
-        if(this.timerId === null){
-          let second = 1000 * this.currentWord.length;
-          this.timerId = setTimeout(callThis, second);
-        }
-        if((this.currentSymbol.textContent).toLowerCase().codePointAt(0) === (event.key).toLowerCase().codePointAt(0)){
+  registerEvents(stop) {
+    document.addEventListener('keydown', (event) =>{
+      if (event.shiftKey || event.altKey || event.ctrlkey) {
+        console.log('Горячие главиши');
+      }else{
+        if((this.currentSymbol.textContent).toLowerCase() === (event.key).toLowerCase()){
           this.success();
         }else{
           this.fail();
         }
+      }
     });
-  }
-
+}
   success() {
     this.currentSymbol.classList.add('symbol_correct');
     this.currentSymbol = this.currentSymbol.nextElementSibling;
@@ -40,27 +40,37 @@ class Game {
     }
     if (++this.winsElement.textContent === 10) {
       alert('Победа!');
-      this.reset();
+      location.reload();
+    }else{
+      this.setNewWord();
     }
-    this.setNewWord();
   }
 
   fail() {
     if (++this.lossElement.textContent === 5) {
       alert('Вы проиграли!');
-      this.reset();
+      location.reload();
+    }else{
+      this.setNewWord();
     }
-    this.setNewWord();
   }
 
   setNewWord() {
-    clearTimeout(this.timerId);
-    this.timerId = null;
-
     const word = this.getWord();
 
     this.currentWord = word;
     this.renderWord(word);
+
+    if(this.timerId !== null)console.timeEnd()
+
+    clearTimeout(this.timerId);
+    this.timerId = null;
+    let callThis = this.fail.bind(this);
+    if(this.timerId === null){
+      console.time()
+      let second = 1000 * this.currentWord.length;
+      this.timerId = setTimeout(callThis, second);
+    }
   }
 
   getWord() {
